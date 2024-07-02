@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Modelli</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/stile.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #343a40; 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: white; 
+        }
+
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .models {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .models:last-child {
+            border-bottom: none;
+        }
+
+        .delete-form {
+            margin: 0; 
+        }
+
+        button[type="submit"] {
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" style="max-height: 80px;">
+            <a class="navbar-brand" href="/#">
+                <img src="/images/siw-car-logo.png" width="300" height="100px" style="margin-top: 20px; margin-left: -40px;"
+                    alt="SiwCar Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsForSaleAdmin">Auto in vendita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsNotForSaleAdmin">Auto vendute</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexCar">Gestione Auto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexBrand">Gestione Marche</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexModel">Gestione Modelli</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <span th:if="${userDetails}" th:text="'user :' + ' ' + ${userDetails.username}"
+                        class="nav-item nav-link"></span>
+                    <a class="nav-item nav-link" href="/formLogin" th:unless="${userDetails}">Login</a>
+                    <a class="nav-item nav-link" href="/logout" th:if="${userDetails}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Modelli</h1>
+        <div th:if="${models==null or models.isEmpty()}">Non ci sono modelli nel sistema</div>
+        <ul>
+            <li th:each="model : ${models}" class="models">
+                <span th:text="${model.name} + ' (' + ${model.brand.name} + ')'"></span>
+                <form class="delete-form" th:action="@{'/admin/elimina-modello/' + ${model.id}}" method="post">
+                    <button type="submit" class="btn btn-danger">Elimina</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-vpV4pUYvuB+xjwn1k5V7zj23gULfPw2pq8Jd+5AYgXTS9VZ1aQ6ikHvoUyNrv4W5"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

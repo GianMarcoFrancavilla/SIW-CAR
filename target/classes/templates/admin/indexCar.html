@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <title>SiwCar - Gestione Macchine</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/stile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .card-custom {
+            background-color: rgba(52, 58, 64, 0.9); 
+            color: white; 
+            border: none;
+            border-radius: 10px; 
+            padding: 20px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+        .btn-custom {
+            width: 30%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .title-text {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .subtitle-text {
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+    <div class="background-container"></div>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" style="max-height: 80px;">
+            <a class="navbar-brand" href="/#">
+                <img src="/images/siw-car-logo.png" width="300" height="100px"
+                    style="margin-top: 20px; margin-left: -40px;" alt="SiwCar Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsForSaleAdmin">Auto in vendita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsNotForSaleAdmin">Auto vendute</a>
+                                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexCar">Gestione Auto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexBrand">Gestione Marche</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/admin/indexModel">Gestione Modelli</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <span th:if="${userDetails}" th:text="'user :' + ' ' + ${userDetails.username}"
+                        class="nav-item nav-link"></span>
+                    <a class="nav-item nav-link" href="/formLogin" th:unless="${userDetails}">Login</a>
+                    <a class="nav-item nav-link" href="/logout" th:if="${userDetails}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5" style="padding: 20px;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-custom">
+                    <h1 class="title-text">Gestione Macchine</h1>
+
+                    <div class="mt-4 text-center"> 
+                        <h4 class="subtitle-text">Attraverso questa funzione puoi inserire all'interno del database una nuova automobile,
+                            fornendo tutti i dati richiesti dal sistema</h4>
+                        <div>
+                            <a href="/admin/formNewCar" class="btn btn-primary btn-custom">Inserisci i dati di un'auto</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center"> 
+                        <h4 class="subtitle-text">Attraverso questa funzione puoi assegnare le auto vendute ai rispettivi acquirenti,
+                            consentendo loro di poter effettuare recensioni</h4>
+                        <div>
+                            <a href="/admin/formUpdateCars" class="btn btn-primary btn-custom">Gestisci le auto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-vpV4pUYvuB+xjwn1k5V7zj23gULfPw2pq8Jd+5AYgXTS9VZ1aQ6ikHvoUyNrv4W5"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

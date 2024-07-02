@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiwCar - Registrazione</title>
+    <link rel="stylesheet" href="/css/stile.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        
+        .form-register {
+            background-color: rgba(170, 181, 193, 0.7);
+            border-style: solid;
+            border-color: black;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: left;
+            z-index: 1;
+        }
+
+        .form-register div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative; 
+        }
+
+        .form-register span {
+            width: 100px; 
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .form-register input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .form-register button {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+        }
+
+        .form-register button:hover {
+            background-color: #2980b9;
+        }
+
+       
+        .error-label {
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            margin-left: 400px; 
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container"></div>
+    <div class="overlay"></div>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" style="max-height: 80px;">
+            <a class="navbar-brand" href="/#">
+                <img src="/images/siw-car-logo.png" width="300" height="100px"
+                    style="margin-top: 20px; margin-left: -40px;" alt="SiwCar Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/carsForSale">Auto in vendita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/carsNotForSale">Auto vendute</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <span th:if="${userDetails}" th:text="'user :' + ' ' + ${userDetails.username}"
+                        class="nav-item nav-link"></span>
+                    <a class="nav-item nav-link" href="/formLogin" th:unless="${userDetails}">Login</a>
+                    <a class="nav-item nav-link" href="/logout" th:if="${userDetails}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="form-register">
+        <form th:action="@{/register}" method="POST">
+            <div>
+                <span>Nome:</span>
+                <input type="text" placeholder="Nome" required th:field="${user.name}" />
+                <span class="error-label" th:if="${#fields.hasErrors('user.name')}">
+                    Errore: <span th:errors="${user.name}"></span>
+                </span>
+            </div>
+            <div>
+                <span>Cognome:</span>
+                <input type="text" placeholder="Cognome" required th:field="${user.surname}" />
+                <span class="error-label" th:if="${#fields.hasErrors('user.surname')}">
+                    Errore: <span th:errors="${user.surname}"></span>
+                </span>
+            </div>
+            <div>
+                <span>Email:</span>
+                <input type="email" placeholder="Email" required th:field="${user.email}" />
+                <span class="error-label" th:if="${#fields.hasErrors('user.email')}">
+                    Errore: <span th:errors="${user.email}"></span>
+                </span>
+            </div>
+            <div>
+                <span>Username:</span>
+                <input type="text" placeholder="Username" required th:field="${credentials.username}" />
+                <span class="error-label" th:if="${#fields.hasErrors('credentials.username')}">
+                    Errore: <span th:errors="${credentials.username}"></span>
+                </span>
+            </div>
+            <div>
+                <span>Password:</span>
+                <input type="password" placeholder="Password" required th:field="${credentials.password}" />
+                <span class="error-label" th:if="${#fields.hasErrors('credentials.password')}">
+                    Errore: <span th:errors="${credentials.password}"></span>
+                </span>
+            </div>
+            <div>
+                <button type="submit">Registra</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRrv"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMgSDGFScCZ6pP7w6fjXpn3n5pG"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

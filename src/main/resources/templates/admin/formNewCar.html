@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <title>Nuova auto</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/stile.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+
+        .container-form {
+            background-color: rgba(52, 58, 64, 0.9);
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: white;
+            display: inline-block;
+            width: 150px; 
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 8px;
+            width: 100%; /* Calcolo la larghezza del campo meno quella dell'etichetta */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Spazio inferiore tra i gruppi di campi */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" style="max-height: 80px;">
+            <a class="navbar-brand" href="/#">
+                <img src="/images/siw-car-logo.png" width="300" height="100px"
+                    style="margin-top: 20px; margin-left: -40px;" alt="SiwCar Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsForSaleAdmin">Auto in vendita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/carsNotForSaleAdmin">Auto vendute</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexCar">Gestione Auto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/indexBrand">Gestione Marche</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/admin/indexModel">Gestione Modelli</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <span th:if="${userDetails}" th:text="'user :' + ' ' + ${userDetails.username}"
+                        class="nav-item nav-link"></span>
+                    <a class="nav-item nav-link" href="/formLogin" th:unless="${userDetails}">Login</a>
+                    <a class="nav-item nav-link" href="/logout" th:if="${userDetails}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="container container-form mt-5">
+            <h1 class="text-center mb-4">Aggiungi un'auto</h1>
+            <form th:action="@{/car}" method="POST" th:object="${car}" enctype="multipart/form-data">
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+                </div>
+
+                <div class="row">
+                    <!-- Colonna sinistra -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="brand">Marca:</label>
+                            <select id="brandSelected" name="brand" th:field="${car.brand}" class="form-control"
+                                required>
+                                <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="model">Modello:</label>
+                            <select id="modelSelected" name="model" th:field="${car.model}" class="form-control"
+                                required>
+                                <option th:each="model : ${models}" th:value="${model.id}" th:text="${model.name} + '('+${model.brand.name}+')'"></option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('model')}" th:errors="*{model}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="licensePlate">Targa:</label>
+                            <input type="text" id="licensePlate" name="licensePlate" th:field="${car.licensePlate}"
+                                pattern="[A-Za-z]{2}[0-9]{3}[A-Za-z]{2}" required class="form-control" />
+                            <span th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}"
+                                class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="color">Colore:</label>
+                            <select id="color" name="color" th:field="${car.color}" class="form-control" required>
+                                <option value="Bianco">Bianco</option>
+                                <option value="Nero">Nero</option>
+                                <option value="Rosso">Rosso</option>
+                                <option value="Blu">Blu</option>
+                                <option value="Verde">Verde</option>
+                                <option value="Viola">Viola</option>
+                                <option value="Arancione">Arancione</option>
+                                <option value="Argento">Argento</option>
+                                <!-- Aggiungi altri colori desiderati -->
+                            </select>
+                            <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Colonna destra -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="yearOfProduction">Anno di produzione:</label>
+                            <select id="yearOfProduction" name="yearOfProduction" th:field="${car.yearOfProduction}"
+                                class="form-control" required>
+                                <option th:each="year : ${#numbers.sequence(2023, 1920)}" th:value="${year}"
+                                    th:text="${year}">2023</option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('yearOfProduction')}" th:errors="*{yearOfProduction}"
+                                class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mileage">Chilometraggio:</label>
+                            <input type="number" id="mileage" name="mileage" th:field="${car.mileage}"
+                                class="form-control" min="0" required />
+                            <span th:if="${#fields.hasErrors('mileage')}" th:errors="*{mileage}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Prezzo:</label>
+                            <input type="number" id="price" name="price" th:field="${car.price}" class="form-control"
+                                min="0" required />
+                            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="uploadedImages">Carica immagini:</label>
+                            <input type="file" id="uploadedImages" name="uploadedImages" multiple
+                                class="form-control-file" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Conferma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-vpV4pUYvuB+xjwn1k5V7zj23gULfPw2pq8Jd+5AYgXTS9VZ1aQ6ikHvoUyNrv4W5"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Macchina</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/css/stile.css">
+    <style>
+        body {
+            background-image: url("/images/sfondo siw-car.png");
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/images/background-image.jpg') no-repeat center center/cover;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .card-custom {
+            background-color: rgba(52, 58, 64, 0.9); 
+            color: white; 
+            border: none; 
+            border-radius: 10px;
+            padding: 20px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-gap: 20px;
+            padding: 20px; 
+            border-radius: 10px;
+        }
+
+        .car-images img {
+            width: 100%; 
+            height: auto; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        }
+
+        .text-custom {
+            color: rgb(102, 153, 204); 
+        }
+    </style>
+</head>
+<body>
+<div class="background-container"></div>
+<div class="overlay"></div>
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark" style="max-height: 80px;">
+        <a class="navbar-brand" href="/#">
+            <img src="/images/siw-car-logo.png" width="300" height="100px" style="margin-top: 20px; margin-left: -40px;" alt="SiwCar Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto mt-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="/carsForSale">Auto in vendita</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/carsNotForSale">Auto vendute</a>
+                </li>
+            </ul>
+            <div class="navbar-nav">
+                <span th:if="${userDetails}" th:text="'user :' + ' ' + ${userDetails.username}"
+                      class="nav-item nav-link"></span>
+                <a class="nav-item nav-link" href="/formLogin" th:unless="${userDetails}">Login</a>
+                <a class="nav-item nav-link" href="/logout" th:if="${userDetails}">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container mt-5" style="padding: 20px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card card-custom">
+                <div class="card-body">
+                    <h1 class="card-title mb-4 mt-1 text-center">Dettagli Macchina</h1>
+
+                    <div class="details-grid">
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Marca</h5>
+                            <p class="card-text" th:text="${car.brand.name}"></p>
+                        </div>
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Modello</h5>
+                            <p class="card-text" th:text="${car.model.name}"></p>
+                        </div>
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Anno di produzione</h5>
+                            <p class="card-text" th:text="${car.yearOfProduction}"></p>
+                        </div>
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Chilometraggio</h5>
+                            <p class="card-text" th:text="${car.mileage}+ ' km'"></p>
+                        </div>
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Colore</h5>
+                            <p class="card-text" th:text="${car.color}"></p>
+                        </div>
+                        <div>
+                            <h5 class="card-subtitle mb-2 text-custom">Targa</h5>
+                            <p class="card-text" th:text="${car.licensePlate.toUpperCase()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <h5 class="card-subtitle mb-2 text-custom">Prezzo</h5>
+                        <p class="card-text" th:text="${car.price} + ' euro'"></p>
+                    </div>
+
+                    <div th:if="${car.owner != null}" class="mt-4">
+                        <h4 class="card-title text-custom">Recensione dell'acquirente</h4>
+                        <div th:if="${car.review != null}">
+                            <div>
+                                <p class="card-text" th:if="${car.review.user != null}"
+                                   th:text="'Autore: ' + ${#strings.capitalize(car.review.user.name)} + ' ' + (${car.review.user.surname != null ? #strings.capitalize(car.review.user.surname.substring(0, 1)) + '.' : ''})"></p>
+
+                                <p class="card-text" th:text="'Titolo: ' + ${car.review.title}"></p>
+                                <p class="card-text" th:text="'Testo: ' + ${car.review.text}"></p>
+                                <p class="card-text" th:text="'Valutazione: ' + ${car.review.rating} + ' / 5'"></p>
+                               
+                            </div>
+                        </div>
+                        <div th:unless="${car.review != null}">
+                            <p class="card-text">Nessuna recensione disponibile</p>
+                        </div>
+                    </div>
+
+                    <div th:unless="${car}">
+                        <div class="alert alert-danger mt-4">Macchina non trovata</div>
+                    </div>
+
+                   
+                       <div th:if="${car.carImages}">
+        <h4 class="card-title mt-5 mb-3 text-center text-custom">Immagini della Macchina</h4>
+        <div class="row justify-content-center mt-4">
+   
+            <div th:if="${#lists.isEmpty(base64Strings)}">
+                <div class="col-md-20 text-center">
+                    <p>Nessuna immagine disponibile</p>
+                </div>
+            </div>
+            <div th:each="base64String : ${base64Strings}" class="col-md-8 mb-3">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <img style="border-radius:8px; margin-bottom: 7px;" th:src="'data:image/jpeg;base64,' + ${base64String}" alt="Image" class="img-fluid mb-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-vpV4pUYvuB+xjwn1k5V7zj23gULfPw2pq8Jd+5AYgXTS9VZ1aQ6ikHvoUyNrv4W5"
+        crossorigin="anonymous"></script>
+</body>
+</html>
